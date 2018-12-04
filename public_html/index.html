@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Roll the Dice</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!--whole style of web page-->
+        <style>
+            table{
+                text-align: center;
+                margin: auto;
+                border-radius: 15px;
+                background-color: white;
+            }
+
+            body {
+                position: relative;
+                background-image:url("dice.gif");
+                color: tomato;
+                height: 100vh;
+                line-height: 1;
+            }
+
+            #rollthedice:hover {
+                background-color: #ff5323;
+                transform: translateY(2px);
+            }
+
+            #stopthedice:hover {
+                background-color: #ff5323;
+                transform: translateY(2px);
+            }
+
+            #rollthedice:active {
+                background-color: #ff5323;
+                transform: translateY(2px);
+            }
+
+            #stopthedice:active {
+                background-color: #ff5323;
+                transform: translateY(2px);
+            }
+
+            #rollthedice , #stopthedice{
+                background-color: #4CAF50;
+                border: none;
+                padding: 10px 25px;
+                text-align: center;
+                display: inline-block;
+                font-size: 18px;
+                width: 150px;
+                color: black;
+                font-family: cursive;
+                border-radius: 10px;
+            }
+
+            #gameOver, #restart{
+                background-color: #ff5323;
+                border: none;
+                padding: 8px 15px;
+                text-align: center;
+                display: inline-block;
+                font-size: 13px;
+                width: 90px;
+                color: black;
+                font-family: cursive;
+                border-radius: 10px;
+            }
+        </style>
+
+        <script type="text/javascript">
+            var score = 0;
+            var count = 1;
+            var dice = 1;
+
+            //this function handle the action of ROLL the dice button 
+            function rollthedice() {
+                document.getElementById("rollthedice").disabled = true;
+                document.getElementById("rollthedice").style.opacity = "0.5";
+                document.getElementById("stopthedice").disabled = false;
+                document.getElementById("stopthedice").style.opacity = "1.0";
+                var player1 = document.getElementById("player1");
+                var player2 = document.getElementById("player2");
+                if (parseInt(player1.innerHTML) !== 0 && parseInt(player2.innerHTML) !== 0) {
+                    player1.innerHTML = 0;
+                    player2.innerHTML = 0;
+                }
+                if (parseInt(player1.innerHTML) === 0 && parseInt(player2.innerHTML) === 0) {
+                    var ansLabel = document.getElementById("answer");
+                    ansLabel.innerHTML = "Welcome to Rolling the Dice" + "<br>" + "<h3>Player 1 is playing</h3>";
+                }
+                if (parseInt(player1.innerHTML) !== 0 && parseInt(player2.innerHTML) === 0 && count > 1) {
+                    var ansLabel = document.getElementById("answer");
+                    ansLabel.innerHTML = "Welcome to Rolling the Dice" + "<br>" + "<h3>Player 2 is playing</h3>";
+                }
+                var winner = document.getElementById("winner");
+                winner.innerHTML = "";
+                var diceNo1 = document.getElementById("dice1");
+                var diceNo2 = document.getElementById("dice2");
+                diceNo1.innerHTML = "<img src='rolldice.gif' alt='rolling Dice'\n\
+                height='100' width='100'>";
+                diceNo2.innerHTML = "<img src='rolldice.gif' alt='rolling Dice' \n\
+                height='100' width='100'>";
+            }
+
+            //this function handle the action of STOP the dice button 
+            function stopthedice() {
+                document.getElementById("rollthedice").disabled = false;
+                document.getElementById("rollthedice").style.opacity = "1.0";
+                document.getElementById("stopthedice").disabled = true;
+                document.getElementById("stopthedice").style.opacity = "0.5";
+                var player1 = document.getElementById("player1");
+                var player2 = document.getElementById("player2");
+                var winner = document.getElementById("winner");
+                var turn = document.getElementById("turn");
+                var diceNo1 = document.getElementById("dice1");
+                var diceNo2 = document.getElementById("dice2");
+                var random1 = Math.floor((Math.random() * 6) + 1);
+                var random2 = Math.floor((Math.random() * 6) + 1);
+                diceNo1.innerHTML = "<img src='dice" + random1 + ".jpg' alt='Dice' height='100' width='100'>";
+                diceNo2.innerHTML = "<img src='dice" + random2 + ".jpg' alt='Dice' height='100' width='100'>";
+                var ansLabel = document.getElementById("answer");
+                if (random1 > random2) {
+                    score = String(random1) + String(random2);
+                } else {
+                    score = String(random2) + String(random1);
+                }
+
+                ansLabel.innerHTML = "You get number " + random1 + " and " + random2 + "." + "<br>" +
+                        "<h3>Your Total score is: <i style = 'font-size:2em;'>" + score + "</i></h3>";
+                if (count % 2 === 0) {
+                    player2.innerHTML = score;
+                    if (parseInt(player1.innerHTML) > parseInt(player2.innerHTML)) {
+                        player1win = document.getElementById("player1win");
+                        player1win.play();
+                        winner.innerHTML = "<td colspan='2'><img src='player1win.png' alt='player 1 wins' width='120'></td>";
+                    } else if (parseInt(player2.innerHTML) > parseInt(player1.innerHTML)) {
+                        player2win = document.getElementById("player2win");
+                        player2win.play();
+                        winner.innerHTML = "<td colspan='2'><img src='player2win.png' alt='player 1 wins' width='120'></td>";
+                    } else {
+                        winner.innerHTML = "<td colspan='2'><img src='gameIsTie.jpg' alt='player 1 wins' width='120'></td>";
+                    }
+                } else {
+                    player1.innerHTML = score;
+                }
+                if (parseInt(player2.innerHTML) !== 0) {
+                    turn.innerHTML = "<span style='color: #4e56e8'>Player-1 turn</span>";
+                } else {
+                    turn.innerHTML = "<span style='color: #4e56e8'>Player-2 turn</span>";
+                }
+                count++;
+                score++;
+            }
+
+            //this function handle the action of GAME OVER button 
+            function gameOver() {
+                document.getElementById("rollthedice").disabled = false;
+                document.getElementById("rollthedice").style.opacity = "1.0";
+                document.getElementById("stopthedice").disabled = false;
+                document.getElementById("stopthedice").style.opacity = "1.0";
+                if (parseInt(player1.innerHTML) > parseInt(player2.innerHTML)) {
+                    player1win = document.getElementById("player1win");
+                    player1win.play();
+                    winner.innerHTML = "<td colspan='2'><img src='player1win.png' alt='player 1 win' width='120'></td>";
+                } else if (parseInt(player2.innerHTML) > parseInt(player1.innerHTML)) {
+                    player2win = document.getElementById("player2win");
+                    player2win.play();
+                    winner.innerHTML = "<td colspan='2'><img src='player2win.png' alt='player 2 win' width='120'></td>";
+                } else {
+                    winner.innerHTML = "<td colspan='2'><img src='gameIsTie.jpg' alt='Tied Up' width='120'></td>";
+                }
+                var ansLabel = document.getElementById("answer");
+                ansLabel.innerHTML = "<h1><i style = 'color:blue; font-size:2em;'>Game-Over</i></h1>";
+                var turn = document.getElementById("turn");
+                turn.innerHTML = "";
+                document.getElementById("restart").disabled = false;
+                document.getElementById("restart").style.opacity = "1.0";
+            }
+
+                //this function handle the action of RESTART button 
+            function restart() {
+                var turn = document.getElementById("turn");
+                turn.innerHTML = "Player-1 turn";
+                var ansLabel = document.getElementById("answer");
+                ansLabel.innerHTML = "Welcome To Rolling the Dice<br><h3>Player 1 Roll the Dice</h3>";
+                document.getElementById("rollthedice").disabled = false;
+                document.getElementById("rollthedice").style.opacity = "1.0";
+                document.getElementById("stopthedice").disabled = false;
+                document.getElementById("stopthedice").style.opacity = "1.0";
+                winner.innerHTML = "";
+                var player1 = document.getElementById("player1");
+                player1.innerHTML = 0;
+
+                var player2 = document.getElementById("player2");
+                player2.innerHTML = 0;
+            }
+        </script>
+    </head>
+    <body>
+        <table style="height:600">
+            <!--this table maintain the whole structure of main middle model-->
+            <thead>
+                <tr>
+                    <th colspan = "2" ><img src="title.png" alt="title" width="500" height="180" ></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><h3>Dice No.1</h3></td>
+                    <td><h3>Dice No.2</h3></td>
+                </tr>
+                <tr>
+                    <td id ="dice1"><img src ="dice3.jpg" alt="" width="100" height="100"></td>
+                    <td id ="dice2"><img src ="dice1.jpg" alt="" width="100" height="100"></td>
+                </tr>
+                <tr>
+                    <td><input type ="button" value = "Roll the Dice" name="rollthedice" id="rollthedice" onclick ="rollthedice()"></td>
+                    <td><input type ="button" value = "Stop the Dice" name="stopthedice" id="stopthedice" onclick ="stopthedice()"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h3 id = "turn"><span  style="color: #4e56e8">Player-1 turn</span></h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" id = "answer">Welcome To Rolling the Dice<br><h3>Player 1 Roll the Dice</h3></td>
+                </tr>
+                <tr>
+                    <td>Player1</td>
+                    <td>Player2</td>
+                </tr>
+                <tr>
+                    <td id="score1"><b style="font-size: 2em;" id = "player1">0</b></td>
+                    <td id="score2"><b style="font-size: 2em;" id = "player2">0</b></td>
+                </tr>
+                <tr id = "winner">
+                    <td><input type="button" value="GameOver" name="gameOver" id="gameOver" onclick="gameOver()" ></td>
+                    <td><input type="button" value="Restart" name="restart" id="restart" onclick="restart()" disabled ></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!--maintain the action of audio - which player is won--> 
+        <audio hidden>
+            <embed src="player1win.mp3"  width="180" height="90" loop="false" autostart="false"/>
+            <embed src="player2win.mp3"  width="180" height="90" loop="false" autostart="false"/>
+        </audio>
+        <audio id="player1win" hidden>
+            <source src="player1win.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="player2win" hidden>
+            <source src="player2win.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="tiedup" hidden>
+            <source src="tiedup.mp3" type="audio/mpeg">
+        </audio>
+    </body>
+</html>
